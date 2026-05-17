@@ -4,6 +4,7 @@
 BSc (Hons) Creative Computing · UAL Creative Computing Institute · 2026
 
 🌐 **Live site:** https://controlmyspace.github.io/Computational-Practices-Visualisation-and-Sensing/
+
 📁 **Repository:** https://github.com/controlmyspace/Computational-Practices-Visualisation-and-Sensing
 
 ---
