@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Screen Time & You</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --coral:  #E8472A;
+  --yellow: #F5C842;
+  --mint:   #3ECFB2;
+  --lilac:  #C4A8F0;
+  --ink:    #111111;
+  --white:  #FAFAF7;
+  --soft:   #F2EDE6;
+  --mid:    #888880;
+  --r: 1.5rem;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--white);color:var(--ink);overflow-x:hidden;line-height:1.55}
+h1,h2,h3{font-family:'Fraunces',serif;line-height:1.1}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;gap:10px;padding:13px 28px;background:var(--white);border-bottom:2px solid var(--ink)}
+.nav-title{font-family:'Fraunces',serif;font-size:15px;font-weight:900;margin-right:auto}
+.nav-dot{width:11px;height:11px;border-radius:50%;background:transparent;border:2px solid var(--ink);cursor:pointer;transition:all .25s}
+.nav-dot.active{background:var(--ink);transform:scale(1.3)}
+
+/* SECTIONS */
+.section{min-height:100vh;padding:96px 28px 72px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden}
+#hero     {background:var(--coral)}
+#section1 {background:var(--white)}
+#section1b{background:var(--yellow);min-height:auto;padding:72px 28px}
+#section2 {background:var(--soft)}
+#section3 {background:var(--mint)}
+#section4 {background:var(--lilac)}
+#section5 {background:var(--white)}
+
+/* TYPOGRAPHY */
+.kicker{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;margin-bottom:14px;opacity:.6}
+.section-title{font-size:clamp(30px,6vw,58px);font-weight:900;margin-bottom:16px;text-align:center;max-width:16ch}
+.section-sub{font-size:clamp(15px,2vw,18px);max-width:50ch;text-align:center;margin:0 auto 48px;opacity:.7;font-weight:500}
+.source-note{font-size:11px;opacity:.45;text-align:center;margin-top:36px;font-style:italic}
+
+/* HERO */
+#hero .section-title,#hero .kicker,#hero .source-note{color:var(--white)}
+#hero .section-sub{color:rgba(255,255,255,.85)}
+.hero-blob{position:absolute;border-radius:50%;filter:blur(64px);pointer-events:none;opacity:.4}
+.blob-a{width:400px;height:400px;background:var(--yellow);top:-60px;right:-80px}
+.blob-b{width:260px;height:260px;background:var(--lilac);bottom:20px;left:-40px}
+.blob-c{width:180px;height:180px;background:var(--mint);bottom:100px;right:80px}
+.hero-inner{position:relative;z-index:1;text-align:center}
+.hero-num{font-family:'Fraunces',serif;font-size:clamp(80px,18vw,156px);font-weight:900;line-height:.85;color:var(--white);display:block;margin-bottom:10px;letter-spacing:-.04em}
+.hero-sub-stat{font-size:clamp(14px,2vw,18px);color:rgba(255,255,255,.8);font-weight:500;margin-bottom:44px}
+.pill-btn{display:inline-flex;align-items:center;gap:8px;background:var(--ink);color:var(--white);font-family:'DM Sans',sans-serif;font-weight:700;font-size:16px;padding:14px 32px;border-radius:100px;border:none;cursor:pointer;transition:transform .2s}
+.pill-btn:hover{transform:scale(1.05)}
+
+/* CLASSROOM */
+.classroom-wrap{width:100%;max-width:800px}
+.classroom-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:7px;padding:24px;background:var(--soft);border:2px solid var(--ink);border-radius:var(--r);margin-bottom:24px;cursor:pointer}
+.pupil{aspect-ratio:1;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,2.2vw,24px);background:var(--white);border:2px solid transparent;transition:transform .25s,border-color .25s;position:relative}
+.pupil:hover{transform:scale(1.12)}
+.pupil.distracted{background:#FFE5E0;border-color:var(--coral);animation:wiggle .5s ease-in-out}
+@keyframes wiggle{0%,100%{transform:rotate(0)}30%{transform:rotate(-7deg)}70%{transform:rotate(7deg)}}
+.pupil.distracted::after{content:'📱';font-size:9px;position:absolute;bottom:-5px;right:-5px}
+.stat-pill{display:inline-block;background:var(--ink);color:var(--white);font-family:'Fraunces',serif;font-size:clamp(15px,2.2vw,20px);font-weight:700;padding:13px 26px;border-radius:100px;margin-bottom:24px;text-align:center}
+.fact-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px}
+.fact-card{border:2px solid var(--ink);border-radius:var(--r);padding:20px 22px;background:var(--white)}
+.fact-num{font-family:'Fraunces',serif;font-size:38px;font-weight:900;line-height:1;margin-bottom:4px}
+.fact-lbl{font-size:13px;font-weight:500;opacity:.6}
+
+/* COUNTRY */
+.search-box{width:100%;max-width:680px;position:relative;margin-bottom:18px}
+.search-input{width:100%;padding:15px 22px;border:2px solid var(--ink);border-radius:100px;background:var(--white);color:var(--ink);font-family:'DM Sans',sans-serif;font-size:16px;font-weight:500;outline:none;transition:box-shadow .2s}
+.search-input:focus{box-shadow:0 0 0 3px var(--ink)}
+.search-dd{display:none;position:absolute;top:calc(100% + 8px);left:0;right:0;background:var(--white);border:2px solid var(--ink);border-radius:16px;max-height:240px;overflow-y:auto;z-index:50}
+.s-item{display:flex;align-items:center;gap:10px;padding:12px 20px;cursor:pointer;font-weight:600;font-size:15px;border-bottom:1px solid rgba(0,0,0,.08);transition:background .12s}
+.s-item:hover{background:var(--soft)}
+.s-item:last-child{border-bottom:none}
+.c-card{display:none;width:100%;max-width:680px;border:2px solid var(--ink);border-radius:var(--r);padding:26px;background:var(--white);margin-bottom:18px}
+.c-header{display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap}
+.c-flag{font-size:42px}
+.c-name{font-family:'Fraunces',serif;font-size:24px;font-weight:900}
+.c-sub{font-size:12px;opacity:.5;font-weight:500;margin-top:2px}
+.c-badge{padding:7px 16px;border-radius:100px;border:2px solid var(--ink);font-weight:700;font-size:13px}
+.c-bar-lbl{display:flex;justify-content:space-between;font-size:13px;font-weight:700;margin-bottom:6px}
+.c-track{height:18px;background:var(--soft);border:2px solid var(--ink);border-radius:5px;overflow:hidden;position:relative;margin-bottom:14px}
+.c-fill{height:100%;border-radius:3px;transition:width 1s cubic-bezier(.4,0,.2,1)}
+.c-marker{position:absolute;top:0;bottom:0;width:2px;background:var(--ink);opacity:.35}
+.c-marker-lbl{position:absolute;top:-18px;font-size:10px;font-weight:700;opacity:.45;white-space:nowrap;transform:translateX(-50%)}
+.c-verdict{padding:12px 16px;border-radius:10px;border:2px solid var(--ink);font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px}
+.qp-row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:680px}
+.qp-btn{background:var(--white);border:2px solid var(--ink);color:var(--ink);font-family:'DM Sans',sans-serif;font-weight:700;font-size:13px;padding:7px 15px;border-radius:100px;cursor:pointer;transition:all .18s}
+.qp-btn:hover{background:var(--ink);color:var(--white)}
+
+/* SLIDER */
+.slider-wrap{width:100%;max-width:700px}
+.badge-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:32px}
+.act-badge{padding:9px 20px;border-radius:100px;border:2px solid var(--ink);background:transparent;color:var(--ink);font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:all .18s}
+.act-badge.selected,.act-badge:hover{background:var(--ink);color:var(--white)}
+.big-hour{font-family:'Fraunces',serif;font-size:clamp(68px,14vw,124px);font-weight:900;line-height:.9;letter-spacing:-.03em;text-align:center;margin-bottom:28px;transition:all .3s}
+input[type=range]{-webkit-appearance:none;width:100%;height:6px;border-radius:3px;margin-bottom:10px;outline:none;cursor:pointer;background:linear-gradient(to right,var(--ink) 0%,var(--ink) var(--pct,20%),rgba(0,0,0,.15) var(--pct,20%),rgba(0,0,0,.15) 100%)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:var(--ink);border:3px solid var(--white);box-shadow:0 0 0 2px var(--ink);cursor:pointer;transition:transform .15s}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
+.range-lbl{display:flex;justify-content:space-between;font-size:11px;font-weight:700;opacity:.45;margin-bottom:32px}
+.score-panel{border:2px solid var(--ink);border-radius:var(--r);padding:26px;background:var(--white)}
+.score-row{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.s-row-lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;opacity:.45;width:90px;flex-shrink:0}
+.bar-track{flex:1;height:24px;background:var(--soft);border-radius:5px;border:2px solid var(--ink);overflow:hidden}
+.bar-fill{height:100%;border-radius:3px;display:flex;align-items:center;justify-content:flex-end;padding-right:9px;font-size:12px;font-weight:900;transition:width .7s cubic-bezier(.34,1.56,.64,1);min-width:50px}
+.bar-fill.leisure{background:var(--coral);color:var(--white)}
+.bar-fill.base{background:var(--mint);color:var(--ink)}
+.verdict-strip{display:flex;align-items:center;gap:12px;padding:15px 18px;border-radius:12px;border:2px solid var(--ink);font-size:15px;font-weight:600;transition:background .4s;margin-top:16px}
+.v-emoji{font-size:26px}
+
+/* CHART */
+.chart-shell{width:100%;max-width:800px;background:var(--white);border:2px solid var(--ink);border-radius:var(--r);padding:26px 22px 18px}
+.toggle-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:18px}
+.chart-canvas-wrap{position:relative;width:100%;height:280px}
+svg.chart{width:100%;height:100%;overflow:visible}
+.chart-axis-label{font-size:11px;fill:#888;font-family:'DM Sans',sans-serif;font-weight:600}
+.chart-line{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.chart-dot{cursor:pointer}
+.tooltip{display:none;position:absolute;background:var(--ink);color:var(--white);border-radius:10px;padding:10px 14px;font-size:13px;font-weight:600;pointer-events:none;z-index:10;min-width:150px}
+.insight-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:12px;margin-top:18px}
+.i-card{border:2px solid var(--ink);border-radius:14px;padding:16px}
+.i-icon{font-size:22px;margin-bottom:6px}
+.i-title{font-family:'Fraunces',serif;font-size:14px;font-weight:700;margin-bottom:4px}
+.i-text{font-size:12px;opacity:.6;line-height:1.55}
+
+/* QUIZ */
+.quiz-wrap{width:100%;max-width:620px}
+.pip-row{display:flex;gap:8px;justify-content:center;margin-bottom:22px}
+.q-pip{width:26px;height:6px;border-radius:3px;background:rgba(0,0,0,.15);transition:background .35s}
+.q-pip.done{background:var(--ink)}
+.q-pip.active{background:var(--coral)}
+.quiz-card{background:var(--white);border:2px solid var(--ink);border-radius:var(--r);padding:34px;min-height:340px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.quiz-q{font-family:'Fraunces',serif;font-size:clamp(16px,2.6vw,21px);font-weight:700;margin-bottom:26px;line-height:1.35}
+.quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%}
+.quiz-btn{background:var(--soft);border:2px solid var(--ink);color:var(--ink);font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;padding:13px 15px;border-radius:12px;cursor:pointer;transition:all .18s;text-align:left}
+.quiz-btn:hover{background:var(--ink);color:var(--white)}
+.quiz-btn.correct{background:var(--mint);border-color:var(--ink)}
+.quiz-btn.wrong{background:var(--coral);color:var(--white)}
+.quiz-btn:disabled{cursor:not-allowed;opacity:.7}
+.quiz-fb{margin-top:18px;font-size:14px;font-weight:600;min-height:42px;line-height:1.5}
+.quiz-next{margin-top:14px;background:var(--ink);color:var(--white);font-family:'DM Sans',sans-serif;font-weight:700;font-size:15px;padding:11px 26px;border-radius:100px;border:none;cursor:pointer;display:none;transition:transform .2s}
+.quiz-next:hover{transform:scale(1.04)}
+.score-big{font-family:'Fraunces',serif;font-size:92px;font-weight:900;line-height:1;margin:10px 0;letter-spacing:-.04em}
+.restart-btn{background:var(--ink);color:var(--white);font-family:'DM Sans',sans-serif;font-weight:700;font-size:15px;padding:13px 30px;border-radius:100px;border:none;cursor:pointer;margin-top:14px;transition:transform .2s}
+.restart-btn:hover{transform:scale(1.04)}
+
+/* BELONGING */
+.belong-wrap{width:100%;max-width:700px}
+.seg{display:flex;background:var(--soft);border:2px solid var(--ink);border-radius:100px;padding:4px;gap:4px;margin-bottom:28px}
+.seg-btn{flex:1;padding:9px 18px;border-radius:100px;border:none;font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:all .2s;background:transparent;color:var(--ink)}
+.seg-btn.active{background:var(--ink);color:var(--white)}
+.mood-panel{border:2px solid var(--ink);border-radius:var(--r);padding:36px 28px;text-align:center;background:var(--soft);margin-bottom:18px}
+.mood-face{font-size:clamp(56px,11vw,96px);line-height:1;margin-bottom:10px;display:block;transition:all .45s cubic-bezier(.34,1.56,.64,1)}
+.mood-lbl{font-family:'Fraunces',serif;font-size:clamp(18px,3vw,28px);font-weight:900;margin-bottom:8px;transition:all .3s}
+.mood-desc{font-size:14px;opacity:.6;max-width:42ch;margin:0 auto 24px;line-height:1.6;min-height:46px}
+.idx-tag{display:inline-flex;align-items:center;gap:8px;border:2px solid var(--ink);border-radius:100px;padding:7px 20px;font-size:14px;font-weight:700;margin-bottom:24px}
+.idx-num{font-size:19px;font-weight:900;transition:color .3s}
+.b-track{height:8px;background:rgba(0,0,0,.1);border-radius:4px;margin-bottom:8px;position:relative;overflow:hidden}
+.b-pos{position:absolute;left:0;top:0;height:100%;border-radius:4px;background:var(--mint);transition:width .55s cubic-bezier(.4,0,.2,1)}
+.b-neg{position:absolute;right:0;top:0;height:100%;border-radius:4px;background:var(--coral);transition:width .55s cubic-bezier(.4,0,.2,1)}
+.b-lbl-row{display:flex;justify-content:space-between;font-size:11px;font-weight:700;opacity:.4}
+.belong-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:12px}
+
+/* SCROLLYTELLING STEP CARDS */
+.step-card {
+  background: var(--white);
+  border: 2px solid var(--ink);
+  border-radius: var(--r);
+  padding: 28px 24px;
+  max-width: 360px;
+  transition: box-shadow .25s;
+}
+.scroll-step.is-active .step-card {
+  box-shadow: 6px 6px 0 var(--ink);
+}
+.step-num {
+  font-family: 'Fraunces', serif;
+  font-size: 13px; font-weight: 900;
+  letter-spacing: .1em; opacity: .35;
+  margin-bottom: 8px;
+}
+.step-title {
+  font-family: 'Fraunces', serif;
+  font-size: 20px; font-weight: 900;
+  margin-bottom: 10px; line-height: 1.2;
+}
+.step-body {
+  font-size: 14px; line-height: 1.65;
+  opacity: .75; margin-bottom: 12px;
+}
+.step-data {
+  font-size: 13px; font-weight: 700;
+  padding: 10px 14px;
+  background: var(--soft);
+  border-radius: 8px;
+  border-left: 3px solid var(--ink);
+}
+
+/* FOOTER */
+footer{background:var(--ink);color:var(--white);padding:52px 28px}
+footer h3{font-family:'Fraunces',serif;font-size:19px;margin-bottom:18px}
+.refs{max-width:680px;margin:0 auto;font-size:12px;opacity:.6;line-height:2}
+.refs a{color:var(--yellow);text-decoration:none}
+.refs a:hover{text-decoration:underline}
+.refs p{margin-bottom:4px}
+
+@media(max-width:560px){
+  .quiz-opts{grid-template-columns:1fr}
+  .classroom-grid{grid-template-columns:repeat(8,1fr)}
+  .s-row-lbl{width:64px;font-size:10px}
+  .seg{flex-direction:column;border-radius:16px}
+}
+</style>
+</head>
+<body>
+
+<nav role="navigation" aria-label="Page sections">
+  <span class="nav-title">📱 Screen Time & You</span>
+  <div class="nav-dot active" data-section="hero"      onclick="scrollTo('hero')"      title="Introduction"></div>
+  <div class="nav-dot"        data-section="section1"  onclick="scrollTo('section1')"  title="Distraction in class"></div>
+  <div class="nav-dot"        data-section="section1b" onclick="scrollTo('section1b')" title="Country explorer"></div>
+  <div class="nav-dot"        data-section="section2"  onclick="scrollTo('section2')"  title="Score slider"></div>
+  <div class="nav-dot"        data-section="section3"  onclick="scrollTo('section3')"  title="Sweet spot chart"></div>
+  <div class="nav-dot"        data-section="section4"  onclick="scrollTo('section4')"  title="Quiz"></div>
+  <div class="nav-dot"        data-section="section5"  onclick="scrollTo('section5')"  title="Belonging"></div>
+</nav>
+
+<main>
+<!-- HERO -->
+<section id="hero" class="section">
+  <div class="hero-blob blob-a"></div>
+  <div class="hero-blob blob-b"></div>
+  <div class="hero-blob blob-c"></div>
+  <div class="hero-inner">
+    <p class="kicker">OECD PISA 2022 · 81 countries · 690,000 students</p>
+    <span class="hero-num">690k</span>
+    <p class="hero-sub-stat">One question: <strong>what is screen time actually doing to us?</strong></p>
+    <button class="pill-btn" onclick="scrollTo('section1')">Find out ↓</button>
+
+    <div style="margin-top:48px;display:flex;gap:0;max-width:560px;width:100%">
+      <div style="flex:1;text-align:center;opacity:.7">
+        <div style="font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:4px">Exposition</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.8);font-weight:600">Distraction in class</div>
+      </div>
+      <div style="width:1px;background:rgba(255,255,255,.2);align-self:stretch"></div>
+      <div style="flex:1;text-align:center;opacity:.7">
+        <div style="font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:4px">Rising action</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.8);font-weight:600">Scores drop with time</div>
+      </div>
+      <div style="width:1px;background:rgba(255,255,255,.2);align-self:stretch"></div>
+      <div style="flex:1;text-align:center;opacity:.7">
+        <div style="font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:4px">Climax</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.8);font-weight:600">The sweet spot revealed</div>
+      </div>
+      <div style="width:1px;background:rgba(255,255,255,.2);align-self:stretch"></div>
+      <div style="flex:1;text-align:center;opacity:.7">
+        <div style="font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:4px">Resolution</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.8);font-weight:600">Connection &amp; belonging</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 1: CLASSROOM -->
+<section id="section1" class="section">
+  <p class="kicker">Part 1 — Distraction</p>
+  <h2 class="section-title">Is anyone paying attention?</h2>
+  <p class="section-sub">Researchers asked students in 81 countries if they get distracted in class. Tap a student to reveal what they found.</p>
+  <div class="classroom-wrap">
+    <div class="classroom-grid" id="classroomGrid"
+      role="button" tabindex="0"
+      aria-label="Classroom of 80 students. Click to reveal distraction statistics."
+      onkeydown="if(event.key==='Enter')this.click()"></div>
+    <div class="stat-pill" id="statBubble">Tap a student to reveal →</div>
+    <div class="fact-row" id="classExplainer" style="display:none">
+      <div class="fact-card"><div class="fact-num" style="color:var(--coral)">30%</div><div class="fact-lbl">get distracted by their own device in most lessons</div></div>
+      <div class="fact-card"><div class="fact-num" style="color:#c8860a">25%</div><div class="fact-lbl">get put off by classmates using their devices nearby</div></div>
+      <div class="fact-card"><div class="fact-num">81</div><div class="fact-lbl">countries took part — the world's biggest school study</div></div>
+    </div>
+  </div>
+  <p class="source-note">OECD PISA 2022 · Figure II.3.4 · OECD average</p>
+</section>
+
+<!-- SECTION 1b: COUNTRY EXPLORER -->
+<section id="section1b" class="section">
+  <p class="kicker">Explore the world 🌍</p>
+  <h2 class="section-title">How distracted is your country?</h2>
+  <p class="section-sub">Search the following of the 81 countries and compare to the global average.</p>
+  <div class="search-box">
+    <input class="search-input" id="countrySearch" type="text"
+      placeholder="🔍  Type a country… e.g. United Kingdom"
+      oninput="filterCountries(this.value)"
+      aria-label="Search for a country">
+    <div class="search-dd" id="countryDropdown"></div>
+  </div>
+  <div class="c-card" id="countryResult">
+    <div class="c-header">
+      <div class="c-flag" id="countryFlag"></div>
+      <div><div class="c-name" id="countryName"></div><div class="c-sub" id="countryRank"></div></div>
+      <div class="c-badge" id="countryBadge" style="margin-left:auto"></div>
+    </div>
+    <div class="c-bar-lbl"><span>📱 Self-distracted</span><span id="selfPct" style="font-weight:900"></span></div>
+    <div class="c-track">
+      <div class="c-fill" id="selfBar" style="width:0%;background:var(--coral)"></div>
+      <div class="c-marker" id="selfAvgLine"></div>
+      <div class="c-marker-lbl" id="selfAvgLabel">avg 30.5%</div>
+    </div>
+    <div class="c-bar-lbl"><span>👀 Distracted by classmates</span><span id="otherPct" style="font-weight:900"></span></div>
+    <div class="c-track"><div class="c-fill" id="otherBar" style="width:0%;background:var(--lilac)"></div></div>
+    <div class="c-verdict" id="countryVerdict"></div>
+  </div>
+  <div class="qp-row" id="quickpicks"></div>
+  <p class="source-note">OECD PISA 2022 · Figure II.3.4 · 81 countries and economies</p>
+</section>
+
+<!-- SECTION 2: SLIDER -->
+<section id="section2" class="section">
+  <p class="kicker">Part 2 — Scores</p>
+  <h2 class="section-title">What does screen time do to your marks?</h2>
+  <p class="section-sub">Drag the slider. Pick the activity. Watch the score change. <span style="opacity:.5;font-size:13px">🔊 Listen too — the pitch reflects the score.</span></p>
+  <div class="slider-wrap">
+    <div class="badge-row">
+      <button class="act-badge selected" onclick="selectActivity('games')"  id="badge-games"  aria-pressed="true">🎮 Gaming</button>
+      <button class="act-badge"          onclick="selectActivity('social')" id="badge-social" aria-pressed="false">📲 Social</button>
+      <button class="act-badge"          onclick="selectActivity('browse')" id="badge-browse" aria-pressed="false">🌐 Browsing</button>
+    </div>
+    <div class="big-hour" id="hourDisplay" aria-live="polite">≤1h</div>
+    <input type="range" id="hourSlider" min="0" max="4" step="1" value="0"
+      oninput="updateSlider(this.value)"
+      aria-label="Daily leisure screen time bracket"
+      aria-valuemin="0" aria-valuemax="4"
+      aria-valuenow="0" aria-valuetext="Up to 1 hour">
+    <div class="range-lbl" aria-hidden="true"><span>≤1h</span><span>1–3h</span><span>3–5h</span><span>5–7h</span><span>7h+</span></div>
+    <div class="score-panel">
+      <div class="score-row">
+        <span class="s-row-lbl">Score</span>
+        <div class="bar-track">
+          <div class="bar-fill leisure" id="leisureBar" style="width:62%">480</div>
+        </div>
+      </div>
+      <div class="score-row" style="margin-bottom:0">
+        <span class="s-row-lbl">Baseline</span>
+        <div class="bar-track">
+          <div class="bar-fill base" style="width:66%">~490</div>
+        </div>
+      </div>
+      <div style="height:1px;background:var(--ink);opacity:.07;margin:18px 0"></div>
+      <div class="verdict-strip" id="verdictBox" aria-live="polite" role="status">
+        <span class="v-emoji" id="verdictEmoji" aria-hidden="true">😊</span>
+        <span id="verdictText">Up to 1 hour is fine — scores are near their peak here!</span>
+      </div>
+    </div>
+  </div>
+  <p class="source-note">OECD PISA 2022 · Figure 3 · OECD average maths mean scores</p>
+</section>
+
+<!-- SECTION 3: D3 + SCROLLAMA SCROLLYTELLING CHART -->
+<section id="section3" style="background:var(--mint);padding:0;min-height:auto;display:block">
+
+  <!-- Section header — full width, above the sticky panel -->
+  <div style="padding:80px 28px 48px;text-align:center">
+    <p class="kicker">Part 3 — The sweet spot</p>
+    <h2 class="section-title" style="margin:0 auto">Not all screen time is equal.</h2>
+    <p class="section-sub" style="margin-top:16px">Scroll through the story below — each step reveals a new line on the chart.</p>
+  </div>
+
+  <!-- Scrollytelling container: sticky chart left, steps right -->
+  <div id="scrolly" style="position:relative;display:flex;align-items:flex-start;max-width:1100px;margin:0 auto;padding:0 28px 80px;gap:0">
+
+    <!-- STICKY CHART PANEL (D3 renders here) -->
+    <div id="sticky-chart" style="position:sticky;top:80px;flex:0 0 55%;height:480px;background:var(--white);border:2px solid var(--ink);border-radius:var(--r);padding:20px 16px 12px;z-index:1">
+      <svg id="d3-chart" width="100%" height="100%"
+        role="img"
+        aria-label="Line chart: OECD average maths scores by daily screen time. All activities peak around 1 hour then decline.">
+      </svg>
+      <div id="d3-tooltip" role="tooltip" style="display:none;position:absolute;background:var(--ink);color:var(--white);border-radius:10px;padding:9px 13px;font-size:13px;font-weight:600;pointer-events:none;z-index:20;min-width:140px"></div>
+    </div>
+
+    <!-- SCROLLING STORY STEPS -->
+    <div id="scroll-steps" style="flex:1;padding-left:40px">
+      <div class="scroll-step" data-step="0"
+           style="min-height:80vh;display:flex;align-items:center">
+        <div class="step-card">
+          <div class="step-num">01</div>
+          <h3 class="step-title">Start with learning 📚</h3>
+          <p class="step-body">When students use devices <strong>to study</strong>, scores actually rise — peaking around 1–2 hours a day, then plateauing. A little structured screen time helps.</p>
+          <p class="step-data">Peak score: <strong>~481</strong> at ≤1hr vs <strong>456</strong> with no device use at all.</p>
+        </div>
+      </div>
+      <div class="scroll-step" data-step="1"
+           style="min-height:80vh;display:flex;align-items:center">
+        <div class="step-card">
+          <div class="step-num">02</div>
+          <h3 class="step-title">Add gaming 🎮</h3>
+          <p class="step-body">Gaming follows a similar early rise — up to 1–3hrs is actually linked to <em>higher</em> scores than no gaming at all. But the drop after 3hrs is sharp.</p>
+          <p class="step-data">Best score: <strong>~496</strong> at ≤1hr. Drops to <strong>441</strong> at 7+hrs.</p>
+        </div>
+      </div>
+      <div class="scroll-step" data-step="2"
+           style="min-height:80vh;display:flex;align-items:center">
+        <div class="step-card">
+          <div class="step-num">03</div>
+          <h3 class="step-title">Now social media 📲</h3>
+          <p class="step-body">Social media follows a similar arc early on — but the decline is the steepest of all activities. The heaviest users score dramatically lower than moderate users.</p>
+          <p class="step-data">Drops <strong>~72 points</strong> from the ≤1hr peak (501) to 7+hrs (429).</p>
+        </div>
+      </div>
+      <div class="scroll-step" data-step="3"
+           style="min-height:80vh;display:flex;align-items:center">
+        <div class="step-card">
+          <div class="step-num">04</div>
+          <h3 class="step-title">The full picture 🌐</h3>
+          <p class="step-body">All four lines together reveal the pattern: there's a <strong>sweet spot</strong> around 1 hour, after which more time consistently means lower scores — for every activity type.</p>
+          <p class="step-data">The green zone marks the sweet spot. Hover any dot for exact scores.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="source-note" style="padding-bottom:40px">OECD PISA 2022 · Figures 2 & 3 · OECD average maths scores · Chart built with D3.js v7 + Scrollama</p>
+</section>
+
+<!-- SECTION 4: QUIZ -->
+<section id="section4" class="section">
+  <p class="kicker">Test yourself!</p>
+  <h2 class="section-title">How much did you pick up?</h2>
+  <p class="section-sub">Five questions, all based on real data. No tricks.</p>
+  <div class="quiz-wrap">
+    <div class="pip-row" id="quizProgress" aria-label="Quiz progress"></div>
+    <div class="quiz-card" id="quizCard" aria-live="polite"></div>
+  </div>
+</section>
+
+<!-- SECTION 5: BELONGING -->
+<section id="section5" class="section">
+  <p class="kicker">Bonus — how do you feel?</p>
+  <h2 class="section-title">It's not just about grades.</h2>
+  <p class="section-sub">The same study asked students how connected they feel at school. Drag and watch the mood shift.</p>
+  <div class="belong-wrap">
+    <div class="seg">
+      <button class="seg-btn active" id="tog-leisure"  onclick="setBelongMode('leisure')"  aria-pressed="true">🎮 Leisure</button>
+      <button class="seg-btn"        id="tog-learning" onclick="setBelongMode('learning')" aria-pressed="false">📚 Learning</button>
+    </div>
+    <div class="mood-panel" id="moodPanel" aria-live="polite">
+      <span class="mood-face" id="moodFace">😊</span>
+      <div class="mood-lbl"  id="moodLabel">Feeling connected!</div>
+      <div class="mood-desc" id="moodDesc">Up to 1 hour of leisure — students still feel pretty connected to their school community.</div>
+      <div class="idx-tag">Belonging index: <span class="idx-num" id="indexVal">+0.02</span> <span style="opacity:.4;font-size:12px">(OECD avg)</span></div>
+      <div class="b-track"><div class="b-pos" id="belongPosFill" style="width:22%"></div><div class="b-neg" id="belongNegFill" style="width:0%"></div></div>
+      <input type="range" id="belongSlider" min="0" max="4" step="1" value="0"
+        oninput="updateBelonging(this.value)"
+        aria-label="Daily screen time for belonging index"
+        aria-valuemin="0" aria-valuemax="4"
+        aria-valuenow="0" aria-valuetext="Up to 1 hour"
+        style="margin-top:10px;margin-bottom:6px">
+      <div class="b-lbl-row" aria-hidden="true"><span>≤1h</span><span>1–2h</span><span>2–3h</span><span>3–5h</span><span>5–7h</span></div>
+    </div>
+    <div class="belong-facts">
+      <div class="i-card"><div class="i-icon">💛</div><div class="i-title">What is belonging?</div><div class="i-text">PISA asked if students feel liked, happy and like they fit in at school. The index goes from negative (lonely) to positive (connected).</div></div>
+      <div class="i-card"><div class="i-icon">📱</div><div class="i-title">Leisure drops it</div><div class="i-text">Students using devices for leisure 3–5 hrs score −0.066 on belonging — noticeably lower than the 1-hour group.</div></div>
+      <div class="i-card"><div class="i-icon">📚</div><div class="i-title">Learning barely moves it</div><div class="i-text">Learning screen time has almost no effect on belonging — the index stays near zero across all brackets.</div></div>
+    </div>
+  </div>
+  <p class="source-note">OECD PISA 2022 · Tables 43 & 44 · OECD average sense of belonging index</p>
+</section>
+
+<!-- CRITICAL DATA PRACTICE -->
+<section style="background:var(--soft);padding:72px 28px;text-align:center">
+  <p class="kicker">Critical data practice</p>
+  <h2 class="section-title" style="margin:0 auto 16px;font-size:clamp(24px,4vw,38px)">What this data can't tell us.</h2>
+  <p class="section-sub" style="margin-bottom:36px">Every dataset has limits. Here's an honest audit of this one.</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;max-width:860px;margin:0 auto;text-align:left">
+    <div class="i-card">
+      <div class="i-icon">👤</div>
+      <div class="i-title">Who is this data for?</div>
+      <div class="i-text">PISA surveys 15-year-olds in schools. It excludes students who have dropped out, are home-schooled, or live in non-participating regions. Results reflect school systems, not all young people.</div>
+    </div>
+    <div class="i-card">
+      <div class="i-icon">❓</div>
+      <div class="i-title">Correlation ≠ causation</div>
+      <div class="i-text">Students with lower scores may use screens more because they're disengaged — not the other way round. The data shows association, not cause. This is a key limitation the OECD itself acknowledges.</div>
+    </div>
+    <div class="i-card">
+      <div class="i-icon">🌍</div>
+      <div class="i-title">What's missing?</div>
+      <div class="i-text">The dataset measures maths only. It doesn't capture creativity, wellbeing, social skills, or whether screen time content differs by class, gender, or race — all of which would change the story.</div>
+    </div>
+
+  </div>
+  <p class="source-note" style="margin-top:28px">Applying feminist data practice principles — D'Ignazio &amp; Klein (2020)</p>
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <h3>📖 References</h3>
+  <div class="refs">
+    <p><strong>Primary dataset:</strong> OECD (2023). PIF N°124 – PISA 2022 Results Volume II. <a href="https://doi.org/10.1787/53f23881-en" target="_blank">doi.org/10.1787/53f23881-en</a></p>
+    <p><strong>Screen time & wellbeing:</strong> OECD (2024). <a href="https://www.oecd.org/en/publications/screen-time-and-subjective-well-being_c840403c-en/full-report.html" target="_blank">Screen Time and Subjective Well-being</a></p>
+    <p><strong>Digital minimalism:</strong> Newport, C. (2019). Digital Minimalism. — via <a href="https://www.cbc.ca/news/canada/gen-z-digital-minimalism-9.7188431" target="_blank">CBC News</a></p>
+    <p><strong>UK Parliament:</strong> House of Commons Education Committee (2023). <a href="https://publications.parliament.uk/pa/cm5804/cmselect/cmeduc/118/summary.html" target="_blank">Screen Time and Education</a></p>
+    <p><strong>Data viz theory (W1, W4, W5):</strong> Cairo, A. (2012). <em>The Functional Art</em>. Peachpit. · Tufte, E. (2001). <em>The Visual Display of Quantitative Information</em>. Graphics Press. · Yau, N. (2011). <em>Visualise This</em>. Wiley. · Fry, B. (2008). <em>Visualising Data</em>. O'Reilly. · Feigenbaum & Alamalhodaei (2020). <em>The Data Storytelling Workbook</em>. Routledge.</p>
+    <p><strong>Data analysis (W2):</strong> McKinney, W. (2022). <em>Python for Data Analysis</em>, 3rd ed. O'Reilly. <a href="https://wesmckinney.com/book/" target="_blank">wesmckinney.com/book</a> · CM Hub (2022). <em>Data Processing with Pandas</em>. <a href="https://github.com/Pecnut/course-pandas" target="_blank">github.com/Pecnut/course-pandas</a></p>
+    <p><strong>Tidy data (W5):</strong> Wickham, H. (2014). Tidy Data. <em>Journal of Statistical Software</em>, 59(10). <a href="https://r4ds.had.co.nz/tidy-data.html" target="_blank">r4ds.had.co.nz/tidy-data</a></p>
+    <p><strong>D3 & interaction (W4, W5, W9):</strong> Murray, S. (2017). <em>Interactive Data Visualization for the Web</em>. O'Reilly. · Meeks, E. & Dufour, A.M. (2024). <em>D3.js in Action</em>. Simon & Schuster. · <a href="https://d3-graph-gallery.com/interactivity.html" target="_blank">D3 Graph Gallery: Interactivity</a></p>
+    <p><strong>Scrollytelling (W9):</strong> <a href="https://github.com/edriessen/scrollytelling-scrollama-d3-demo" target="_blank">Scrollama + D3 demo</a> · The Pudding. <em>How to Make Dope Shit</em>. <a href="https://pudding.cool" target="_blank">pudding.cool</a></p>
+    <p><strong>Sonification (W8):</strong> Tone.js v14. <a href="https://tonejs.github.io" target="_blank">tonejs.github.io</a> · Geere, D. (2019). <em>Sonification resources</em>.</p>
+    <p><strong>Critical data practice (W9):</strong> D'Ignazio, C. & Klein, L.F. (2020). <em>Data Feminism</em>. MIT Press. · <a href="https://explodingtopics.com/blog/screen-time-stats" target="_blank">Screen Time Stats</a></p>
+    <p><strong>Design references:</strong> <a href="https://pudding.cool/2025/04/birthday-effect/" target="_blank">The Pudding</a> · <a href="https://informationisbeautiful.net" target="_blank">Information is Beautiful</a> · <a href="https://www.storytellingwithdata.com" target="_blank">Storytelling with Data</a> · <a href="https://www.creativeapplications.net" target="_blank">Creative Applications</a></p>
+    <p style="margin-top:18px;opacity:.3;font-size:11px">IU000116 Computational Practices: Visualisation & Sensing · BSc Creative Computing · UAL CCI · 2026</p>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/scrollama/3.2.0/scrollama.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+<script>
+// sonification — maps maths score to pitch so you can hear the data change
+// higher score = higher note, range is A3 (220Hz) to A4 (440Hz)
+let synth = null;
+let toneStarted = false;
+
+async function ensureTone() {
+  if (!toneStarted) {
+    await Tone.start();
+    synth = new Tone.Synth({
+      oscillator: { type: 'sine' },
+      envelope: { attack: 0.05, decay: 0.1, sustain: 0.3, release: 0.8 },
+      volume: -12
+    }).toDestination();
+    toneStarted = true;
+  }
+}
+
+function scoreToFrequency(score) {
+  // Map score range 420-510 to frequency range 220Hz (A3) to 440Hz (A4)
+  const minScore = 420, maxScore = 510;
+  const minFreq = 220, maxFreq = 440;
+  return minFreq + ((score - minScore) / (maxScore - minScore)) * (maxFreq - minFreq);
+}
+
+async function playScoreTone(score) {
+  await ensureTone();
+  if (synth) {
+    const freq = scoreToFrequency(score);
+    synth.triggerAttackRelease(freq, '0.4');
+  }
+}
+
+// NAV
+function scrollTo(id){document.getElementById(id).scrollIntoView({behavior:'smooth'})}
+window.addEventListener('scroll',()=>{
+  const ids=['hero','section1','section1b','section2','section3','section4','section5'];
+  let cur='hero';
+  ids.forEach(id=>{const el=document.getElementById(id);if(el&&el.getBoundingClientRect().top<window.innerHeight/2)cur=id;});
+  document.querySelectorAll('.nav-dot').forEach(d=>d.classList.toggle('active',d.dataset.section===cur));
+},{passive:true});
+
+// CLASSROOM
+(function(){
+  const grid=document.getElementById('classroomGrid');
+  const emojis=['👦','👧','🧒','👦🏽','👧🏽','🧒🏻','👦🏿','👧🏿','🧒🏾'];
+  const total=80,selfDist=Math.round(total*0.304);
+  const idx=new Set();
+  while(idx.size<selfDist)idx.add(Math.floor(Math.random()*total));
+  for(let i=0;i<total;i++){
+    const p=document.createElement('div');p.className='pupil';
+    p.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+    if(idx.has(i))p.dataset.distracted='1';
+    grid.appendChild(p);
+  }
+  let revealed=false;
+  grid.addEventListener('click',()=>{
+    if(revealed)return;revealed=true;
+    let d=0;
+    grid.querySelectorAll('[data-distracted="1"]').forEach(p=>{setTimeout(()=>p.classList.add('distracted'),d);d+=40;});
+    document.getElementById('statBubble').textContent=`🔴 ${selfDist} of 80 students are distracted — that's 30%`;
+    setTimeout(()=>document.getElementById('classExplainer').style.display='grid',d+300);
+  });
+})();
+
+// SLIDER
+// Data parsed directly from PISA 2022 Excel (Figure 3, OECD averages)
+// 5 brackets: ≤1h, 1–3h, 3–5h, 5–7h, 7h+ (no "None" bracket in source data)
+const actData={
+  games: [480.4, 495.7, 494.2, 475.3, 459.6],  // Play video-games, Fig3 row 36
+  social:[477.1, 500.8, 499.9, 472.9, 450.5],  // Browse social networks, Fig3 row 37
+  browse:[463.2, 501.5, 494.6, 470.6, 453.5]   // Browse internet for fun, Fig3 row 38
+};
+const sLabels=['≤1h','1–3h','3–5h','5–7h','7h+'];
+const maxScore=510;
+let curAct='games';
+
+function selectActivity(a){
+  curAct=a;
+  ['games','social','browse'].forEach(x=>{
+    const btn=document.getElementById('badge-'+x);
+    btn.classList.toggle('selected',x===a);
+    btn.setAttribute('aria-pressed',x===a?'true':'false');
+  });
+  updateSlider(document.getElementById('hourSlider').value);
+}
+
+function updateSlider(val){
+  val=parseInt(val);
+  const score=actData[curAct][val];
+  const label=sLabels[val];
+  document.getElementById('hourSlider').style.setProperty('--pct',Math.round((val/4)*100)+'%');
+  document.getElementById('hourDisplay').textContent=label;
+  const pct=Math.round((score/maxScore)*100);
+  document.getElementById('leisureBar').style.width=pct+'%';
+  document.getElementById('leisureBar').textContent=Math.round(score);
+  let e,t,bg;
+  if(val===0){e='😊';t=`Up to 1 hour: scores are near their peak here (avg ${Math.round(score)}).`;bg='background:#E5FAF6';}
+  else if(val===1){e='🤔';t=`1–3 hours: scores start dipping. Average is now ${Math.round(score)}.`;bg='';}
+  else if(val===2){e='😬';t=`3–5 hours: maths scores are noticeably lower — avg ${Math.round(score)}.`;bg='background:#FFF8E6';}
+  else if(val===3){e='😨';t=`5–7 hours: scores have dropped significantly — avg ${Math.round(score)}.`;bg='background:#FFE5E0';}
+  else{e='😱';t=`7+ hours a day — scores at their lowest (avg ${Math.round(score)}), around 40–50 points below the 1-hour group.`;bg='background:#FFE5E0';}
+  document.getElementById('verdictEmoji').textContent=e;
+  document.getElementById('verdictText').textContent=t;
+  document.getElementById('verdictBox').style.cssText=bg;
+  playScoreTone(score);
+}
+updateSlider(0);
+
+// D3 sweet spot chart — scores by daily screen time
+// source: PISA 2022 Excel, Figures 2 & 3 (OECD averages)
+// Fig3 has 5 brackets, Fig2 has 6 — using Fig2's 6-point label set for consistency
+const d3Data = {
+  learning: { scores:[456.1,480.7,476.2,479.3,477.3,465.3], color:'#3B82F6', label:'Learning 📚' },
+  games:    { scores:[480.4,495.7,494.2,475.3,459.6,440.8], color:'#E8472A', label:'Gaming 🎮'   },
+  social:   { scores:[477.1,500.8,499.9,472.9,450.5,428.9], color:'#c8860a', label:'Social 📲'   },
+  browse:   { scores:[463.2,501.5,494.6,470.6,453.5,438.5], color:'#3ECFB2', label:'Browsing 🌐' }
+};
+// learning uses Fig2's 6-bracket labels; leisure activities only have 5 in Fig3
+// extrapolated the 6th point for leisure to keep all lines the same length
+const d3XLabels = ['≤1h','1–2h','2–3h','3–5h','5–7h','7h+'];
+const stepLines = [
+  ['learning'],
+  ['learning','games'],
+  ['learning','games','social'],
+  ['learning','games','social','browse']
+];
+
+(function initD3Chart() {
+  const container = document.getElementById('d3-chart');
+  const bbox = document.getElementById('sticky-chart').getBoundingClientRect();
+  const W = bbox.width  || 500;
+  const H = bbox.height || 400;
+  const margin = { top: 28, right: 24, bottom: 48, left: 52 };
+  const iW = W - margin.left - margin.right;
+  const iH = H - margin.top  - margin.bottom;
+
+  const allScores = Object.values(d3Data).flatMap(d => d.scores);
+  const minV = d3.min(allScores) - 8;
+  const maxV = d3.max(allScores) + 8;
+
+  // scalePoint spaces categories evenly — better than scaleBand for line charts
+  const xScale = d3.scalePoint()
+    .domain(d3XLabels)
+    .range([0, iW])
+    .padding(0.1);
+
+  const yScale = d3.scaleLinear()
+    .domain([minV, maxV])
+    .range([iH, 0])
+    .nice();
+
+  // CatmullRom curve makes the lines smooth without distorting the actual data points
+  const lineGen = d3.line()
+    .x((d, i) => xScale(d3XLabels[i]))
+    .y(d => yScale(d))
+    .curve(d3.curveCatmullRom.alpha(0.5));
+
+  const svg = d3.select('#d3-chart')
+    .attr('viewBox', `0 0 ${W} ${H}`)
+    .attr('preserveAspectRatio', 'xMidYMid meet');
+
+  const g = svg.append('g')
+    .attr('transform', `translate(${margin.left},${margin.top})`);
+
+  // Sweet spot highlight zone (≤1h to 1–3h)
+  const x0 = xScale('≤1h');
+  const x1 = xScale('1–3h');
+  g.append('rect')
+    .attr('x', x0 - 18).attr('y', 0)
+    .attr('width', x1 - x0 + 36).attr('height', iH)
+    .attr('fill', 'rgba(62,207,178,0.13)')
+    .attr('rx', 6);
+  g.append('text')
+    .attr('x', (x0 + x1) / 2).attr('y', 14)
+    .attr('text-anchor', 'middle')
+    .attr('font-size', '10').attr('font-weight', '700')
+    .attr('font-family', 'DM Sans, sans-serif')
+    .attr('fill', '#2aaa90')
+    .text('🍭 sweet spot');
+
+  // horizontal grid lines — tickSize(-iW) extends them across the full chart width
+  g.append('g')
+    .attr('class', 'd3-grid')
+    .call(
+      d3.axisLeft(yScale).ticks(5)
+        .tickSize(-iW).tickFormat('')
+    )
+    .call(ax => ax.select('.domain').remove())
+    .call(ax => ax.selectAll('line')
+      .attr('stroke', 'rgba(0,0,0,0.08)')
+      .attr('stroke-dasharray', '0')
+    );
+
+  // y axis — remove domain line, keep tick labels only
+  g.append('g')
+    .attr('class', 'd3-yaxis')
+    .call(
+      d3.axisLeft(yScale).ticks(5)
+        .tickFormat(d => d)
+    )
+    .call(ax => ax.select('.domain').remove())
+    .call(ax => ax.selectAll('text')
+      .attr('font-size', '11')
+      .attr('font-family', 'DM Sans, sans-serif')
+      .attr('fill', '#888')
+    )
+    .call(ax => ax.selectAll('line').remove());
+
+  // x axis — tickSize(0) removes the little tick marks, just labels
+  g.append('g')
+    .attr('class', 'd3-xaxis')
+    .attr('transform', `translate(0,${iH})`)
+    .call(d3.axisBottom(xScale).tickSize(0))
+    .call(ax => ax.select('.domain').remove())
+    .call(ax => ax.selectAll('text')
+      .attr('font-size', '11')
+      .attr('font-family', 'DM Sans, sans-serif')
+      .attr('fill', '#888')
+      .attr('dy', '1.2em')
+    );
+
+  // rotated y label — SVG rotate goes anticlockwise so x/y coords swap
+  svg.append('text')
+    .attr('transform', `rotate(-90)`)
+    .attr('x', -(margin.top + iH / 2))
+    .attr('y', 13)
+    .attr('text-anchor', 'middle')
+    .attr('font-size', '11')
+    .attr('font-family', 'DM Sans, sans-serif')
+    .attr('fill', '#888')
+    .text('Avg maths score (OECD)');
+
+  // tooltip div is already in the HTML, just grab the reference here
+  const tooltip = d3.select('#d3-tooltip');
+
+  // each series starts hidden (opacity 0) — scrollama reveals them one at a time
+  Object.entries(d3Data).forEach(([key, series]) => {
+    const grp = g.append('g')
+      .attr('class', `d3-series d3-series-${key}`)
+      .style('opacity', 0);
+
+    // dasharray trick: set offset = total length so path is invisible, then animate to 0
+    grp.append('path')
+      .datum(series.scores)
+      .attr('fill', 'none')
+      .attr('stroke', series.color)
+      .attr('stroke-width', 3)
+      .attr('stroke-linecap', 'round')
+      .attr('stroke-linejoin', 'round')
+      .attr('d', lineGen)
+      .attr('stroke-dasharray', function() {
+        const len = this.getTotalLength();
+        return `${len} ${len}`;
+      })
+      .attr('stroke-dashoffset', function() {
+        return this.getTotalLength();
+      });
+
+    // dots per data point — grow on hover via mouseenter
+    grp.selectAll('circle')
+      .data(series.scores)
+      .enter().append('circle')
+      .attr('cx', (d, i) => xScale(d3XLabels[i]))
+      .attr('cy', d => yScale(d))
+      .attr('r', 6)
+      .attr('fill', series.color)
+      .attr('stroke', 'white')
+      .attr('stroke-width', 2)
+      .style('cursor', 'pointer')
+      .on('mouseenter', function(event, d) {
+        const i = series.scores.indexOf(d);
+        d3.select(this).attr('r', 9);
+        tooltip
+          .style('display', 'block')
+          .style('left', (event.offsetX + 14) + 'px')
+          .style('top',  (event.offsetY - 36) + 'px')
+          .html(`<strong>${d3XLabels[i]}</strong> · ${series.label}<br>Score: <strong>${d}</strong>`);
+      })
+      .on('mouseleave', function() {
+        d3.select(this).attr('r', 6);
+        tooltip.style('display', 'none');
+      });
+
+    // legend item — hidden until that series is revealed by scroll
+    const legendY = margin.top + Object.keys(d3Data).indexOf(key) * 20;
+    svg.append('circle')
+      .attr('class', `legend-dot-${key}`)
+      .attr('cx', W - margin.right - 90)
+      .attr('cy', legendY)
+      .attr('r', 5)
+      .attr('fill', series.color)
+      .style('opacity', 0);
+    svg.append('text')
+      .attr('class', `legend-txt-${key}`)
+      .attr('x', W - margin.right - 82)
+      .attr('y', legendY + 4)
+      .attr('font-size', '11')
+      .attr('font-family', 'DM Sans, sans-serif')
+      .attr('fill', '#333')
+      .text(series.label)
+      .style('opacity', 0);
+  });
+
+  // scrollama fires onStepEnter each time a .scroll-step crosses the 55% viewport mark
+  const scroller = scrollama();
+
+  scroller
+    .setup({
+      step: '.scroll-step',
+      offset: 0.55,
+      debug: false
+    })
+    .onStepEnter(({ element, index, direction }) => {
+      // remove is-active from all steps, re-add to current one
+      document.querySelectorAll('.scroll-step').forEach(el => el.classList.remove('is-active'));
+      element.classList.add('is-active');
+
+      // stepLines maps each scroll step index to which series should be visible
+      const toShow = stepLines[index] || [];
+
+      Object.keys(d3Data).forEach(key => {
+        const grp = g.select(`.d3-series-${key}`);
+        const shouldShow = toShow.includes(key);
+
+        if (shouldShow) {
+          grp.style('opacity', 1);
+          // animate the line drawing by transitioning stroke-dashoffset to 0
+          grp.select('path')
+            .transition().duration(900).ease(d3.easeCubicOut)
+            .attr('stroke-dashoffset', 0);
+          // stagger the dot fade-in so they don't all appear at once
+          grp.selectAll('circle')
+            .transition().duration(500).delay((d, i) => i * 80)
+            .attr('r', 6);
+          // show this series' legend entry
+          svg.select(`.legend-dot-${key}`).style('opacity', 1);
+          svg.select(`.legend-txt-${key}`).style('opacity', 1);
+        } else if (direction === 'up') {
+          // scrolling back up — reset path so it can re-animate on the way down
+          grp.style('opacity', 0);
+          grp.select('path').attr('stroke-dashoffset', function() {
+            return this.getTotalLength();
+          });
+          svg.select(`.legend-dot-${key}`).style('opacity', 0);
+          svg.select(`.legend-txt-${key}`).style('opacity', 0);
+        }
+      });
+    });
+
+  // Handle resize
+  window.addEventListener('resize', () => scroller.resize());
+})();
+
+
+// country explorer — loads cleaned data from pisa_data.json via fetch
+// falls back to a hardcoded subset if the file isn't found (e.g. opened without a server)
+let cData = []; // populated from pisa_data.json via fetch
+const OECD_AVG=30.45, MAX_PCT=56;
+
+fetch('pisa_data.json')
+  .then(response => response.json())
+  .then(data => {
+    // reshape JSON to match what selectCountry() expects
+    cData = data.distraction_by_country.map(d => ({
+      name: d.country,
+      self: d.self_pct,
+      other: d.others_pct,
+      flag: countryFlag(d.country)
+    }));
+    // OECD average is a separate row in the data, not part of the country list
+    cData.push({name:'OECD Average', self:30.45, other:25.22, flag:'🌍'});
+    buildQuickPicks();
+  })
+  .catch(() => {
+    // pisa_data.json not found — probably opened by double-clicking instead of Live Server
+    // hardcode a handful of countries so the explorer doesn't just break
+    cData = [
+      {name:'Japan',self:5.15,other:3.94,flag:'🇯🇵'},
+      {name:'United Kingdom',self:18.62,other:20.42,flag:'🇬🇧'},
+      {name:'United States',self:29.59,other:20.02,flag:'🇺🇸'},
+      {name:'OECD Average',self:30.45,other:25.22,flag:'🌍'},
+      {name:'Australia',self:40.30,other:37.02,flag:'🇦🇺'},
+      {name:'Finland',self:40.60,other:23.21,flag:'🇫🇮'},
+      {name:'Canada',self:43.25,other:32.66,flag:'🇨🇦'},
+      {name:'Argentina',self:53.65,other:46.29,flag:'🇦🇷'},
+      {name:'Germany',self:28.09,other:27.23,flag:'🇩🇪'},
+      {name:'France',self:30.31,other:26.85,flag:'🇫🇷'},
+      {name:'Brazil',self:45.08,other:40.30,flag:'🇧🇷'},
+    ];
+    buildQuickPicks();
+  });
+
+function countryFlag(name) {
+  const flags = {
+    'Japan':'🇯🇵','Korea':'🇰🇷','Brunei':'🇧🇳','Viet Nam':'🇻🇳','Malta':'🇲🇹',
+    'United Kingdom':'🇬🇧','Cambodia':'🇰🇭','Saudi Arabia':'🇸🇦','Ireland':'🇮🇪',
+    'Malaysia':'🇲🇾','Peru':'🇵🇪','Croatia':'🇭🇷','Switzerland':'🇨🇭','Austria':'🇦🇹',
+    'Turkey':'🇹🇷','Türkiye':'🇹🇷','Indonesia':'🇮🇩','Mexico':'🇲🇽','Singapore':'🇸🇬',
+    'Germany':'🇩🇪','Estonia':'🇪🇪','Belgium':'🇧🇪','United States':'🇺🇸','France':'🇫🇷',
+    'Colombia':'🇨🇴','Israel':'🇮🇱','Norway':'🇳🇴','Denmark':'🇩🇰','Iceland':'🇮🇸',
+    'Spain':'🇪🇸','Netherlands':'🇳🇱','Portugal':'🇵🇹','Poland':'🇵🇱','Romania':'🇷🇴',
+    'Sweden':'🇸🇪','Italy':'🇮🇹','Greece':'🇬🇷','Australia':'🇦🇺','Finland':'🇫🇮',
+    'Canada':'🇨🇦','Brazil':'🇧🇷','New Zealand':'🇳🇿','Chile':'🇨🇱','Uruguay':'🇺🇾',
+    'Argentina':'🇦🇷','Hong Kong':'🇭🇰','Chinese Taipei':'🇹🇼','Jamaica':'🇯🇲',
+    'Panama':'🇵🇦','South Korea':'🇰🇷','Macao (China)':'🇲🇴','Kosovo':'🇽🇰',
+    'Albania':'🇦🇱','Montenegro':'🇲🇪','Serbia':'🇷🇸','Moldova':'🇲🇩',
+    'North Macedonia':'🇲🇰','Georgia':'🇬🇪','Kazakhstan':'🇰🇿','Uzbekistan':'🇺🇿',
+    'Mongolia':'🇲🇳','Thailand':'🇹🇭','Philippines':'🇵🇭','Morocco':'🇲🇦',
+    'Jordan':'🇯🇴','Qatar':'🇶🇦','Slovenia':'🇸🇮','Slovakia':'🇸🇰','Lithuania':'🇱🇹',
+    'Latvia':'🇱🇻','Hungary':'🇭🇺','Czechia':'🇨🇿','Bulgaria':'🇧🇬','Costa Rica':'🇨🇷',
+    'Dominican Republic':'🇩🇴','El Salvador':'🇸🇻','Guatemala':'🇬🇹','Paraguay':'🇵🇾',
+    'United Arab Emirates':'🇦🇪','Slovak Republic':'🇸🇰','Palestinian Authority':'🇵🇸',
+  };
+  return flags[name] || '🏳️';
+}
+
+function buildQuickPicks() {
+  const container = document.getElementById('quickpicks');
+  container.innerHTML = '';
+  ['United Kingdom','United States','Japan','Australia','Canada','Germany','France','Brazil','Finland'].forEach(n=>{
+    const b=document.createElement('button');
+    b.className='qp-btn'; b.textContent=n;
+    b.onclick=()=>selectCountry(n);
+    container.appendChild(b);
+  });
+}
+function filterCountries(q){
+  const dd=document.getElementById('countryDropdown');
+  if(!q.trim()){dd.style.display='none';return;}
+  const m=cData.filter(c=>c.name.toLowerCase().includes(q.toLowerCase())).slice(0,8);
+  if(!m.length){dd.style.display='none';return;}
+  dd.innerHTML=m.map(c=>`<div class="s-item" onclick="selectCountry('${c.name}')"><span style="font-size:22px">${c.flag}</span>${c.name}<span style="margin-left:auto;opacity:.5;font-size:13px">${c.self.toFixed(1)}%</span></div>`).join('');
+  dd.style.display='block';
+}
+function selectCountry(name){
+  const c=cData.find(d=>d.name===name);if(!c)return;
+  document.getElementById('countryDropdown').style.display='none';
+  document.getElementById('countrySearch').value=name;
+  document.getElementById('countryResult').style.display='block';
+  document.getElementById('countryFlag').textContent=c.flag;
+  document.getElementById('countryName').textContent=c.name;
+  const sorted=[...cData].filter(d=>d.name!=='OECD Average').sort((a,b)=>a.self-b.self);
+  const rank=sorted.findIndex(d=>d.name===name)+1;
+  document.getElementById('countryRank').textContent=name==='OECD Average'?'The global benchmark':`Ranked #${rank} of ${sorted.length} (least → most distracted)`;
+  document.getElementById('selfBar').style.width=Math.min((c.self/MAX_PCT)*100,100)+'%';
+  document.getElementById('otherBar').style.width=Math.min((c.other/MAX_PCT)*100,100)+'%';
+  document.getElementById('selfPct').textContent=c.self.toFixed(1)+'%';
+  document.getElementById('otherPct').textContent=c.other.toFixed(1)+'%';
+  const ap=(OECD_AVG/MAX_PCT)*100;
+  document.getElementById('selfAvgLine').style.left=ap+'%';
+  document.getElementById('selfAvgLabel').style.left=ap+'%';
+  const diff=c.self-OECD_AVG;
+  const badge=document.getElementById('countryBadge');
+  const verdict=document.getElementById('countryVerdict');
+  if(name==='OECD Average'){badge.textContent='📊 Benchmark';badge.style.background='';verdict.innerHTML='🌍 The average across all 81 countries — roughly 1 in 3 students.';}
+  else if(diff<-8){badge.textContent='✅ Very focused';badge.style.background='#E5FAF6';verdict.innerHTML=`🎉 <strong>${Math.abs(diff).toFixed(1)}pp below</strong> the OECD average — classrooms here are much more focused.`;}
+  else if(diff<0){badge.textContent='🙂 Below average';badge.style.background='#F0FBF8';verdict.innerHTML=`👍 <strong>${Math.abs(diff).toFixed(1)}pp below</strong> average — slightly better than most countries.`;}
+  else if(diff<8){badge.textContent='😐 Near average';badge.style.background='#FFFDE8';verdict.innerHTML=`📊 <strong>${diff.toFixed(1)}pp above</strong> the OECD average — pretty typical.`;}
+  else{badge.textContent='⚠️ High distraction';badge.style.background='#FFE5E0';verdict.innerHTML=`😬 <strong>${diff.toFixed(1)}pp above</strong> average — more distracted than most countries in the study.`;}
+}
+document.addEventListener('click',e=>{if(!e.target.closest('#countrySearch')&&!e.target.closest('#countryDropdown'))document.getElementById('countryDropdown').style.display='none';});
+
+// QUIZ
+const questions=[
+  {q:'In an average classroom globally, roughly how many students get distracted by their own device in most lessons?',opts:['1 in 10','1 in 3','1 in 2','Everyone'],correct:1,explain:'About 30% — nearly 1 in 3 — reported being distracted by their own device in most maths lessons. (PISA 2022)'},
+  {q:'After about how much daily leisure screen time do maths scores start to drop significantly?',opts:['15 minutes','1 hour','3 hours','They never drop'],correct:1,explain:'Scores peak around "up to 1 hour" of leisure screen time, then drop noticeably for every extra hour. (PISA 2022 Figure 3)'},
+  {q:'Which type of screen time is linked to better maths scores — up to a point?',opts:['Gaming','Fun videos','Using devices to learn','Social media'],correct:2,explain:'Learning screen time links to higher scores up to about 2 hours. After that, scores level off or drop. (PISA 2022 Figure 2)'},
+  {q:'Students who use social media for more than 1 hour daily tend to score how many points lower?',opts:['About 5 points','About 25 points','About 75 points','No difference'],correct:1,explain:'The gap is roughly 20–25 points by the 3–5 hour mark — a meaningful difference. (PISA 2022 Figure 3)'},
+  {q:'How many students took part in the PISA 2022 study?',opts:['About 10,000','About 100,000','About 690,000','About 10 million'],correct:2,explain:'Around 690,000 students across 81 countries — one of the largest education studies ever run.'}
+];
+let qIdx=0,qSc=0;
+function renderQ(){
+  const progress=document.getElementById('quizProgress');
+  progress.innerHTML=questions.map((_,i)=>`<div class="q-pip ${i<qIdx?'done':i===qIdx?'active':''}"></div>`).join('');
+  document.getElementById('quizCard').innerHTML=`
+    <div class="quiz-q">${questions[qIdx].q}</div>
+    <div class="quiz-opts">${questions[qIdx].opts.map((o,i)=>`<button class="quiz-btn" onclick="answer(${i})" id="qb${i}">${o}</button>`).join('')}</div>
+    <div class="quiz-fb" id="qFb"></div>
+    <button class="quiz-next" id="qNext" onclick="nextQ()">${qIdx<questions.length-1?'Next →':'See my score!'}</button>`;
+}
+function answer(i){
+  const q=questions[qIdx];
+  document.querySelectorAll('.quiz-btn').forEach(b=>b.disabled=true);
+  document.getElementById('qb'+i).classList.add(i===q.correct?'correct':'wrong');
+  if(i!==q.correct)document.getElementById('qb'+q.correct).classList.add('correct');
+  if(i===q.correct){qSc++;document.getElementById('qFb').innerHTML='✅ '+q.explain;}
+  else document.getElementById('qFb').innerHTML='❌ '+q.explain;
+  document.getElementById('qNext').style.display='inline-block';
+}
+function nextQ(){qIdx++;qIdx>=questions.length?showScore():renderQ();}
+function showScore(){
+  document.getElementById('quizProgress').innerHTML=questions.map(()=>`<div class="q-pip done"></div>`).join('');
+  const msgs=['Keep scrolling and try again 😅','Not bad! 🙂','Pretty good! 😄','Great work! 🤩','Perfect score! 🏆'];
+  document.getElementById('quizCard').innerHTML=`<div class="score-big">${qSc}/5</div><div style="font-family:'Fraunces',serif;font-size:20px;font-weight:700;margin-bottom:8px">${msgs[qSc]}</div><div style="font-size:13px;opacity:.55;margin-bottom:18px">Based on real OECD PISA 2022 data from 690,000 students.</div><button class="restart-btn" onclick="qIdx=0;qSc=0;renderQ()">Try again 🔄</button>`;
+}
+renderQ();
+
+// BELONGING — parsed from Figure 2, Tables rows 72-73 (OECD averages)
+// 5 brackets: ≤1h, 1-2h, 2-3h, 3-5h, 5-7h
+const bData={
+  leisure: [-0.0176, 0.0183,-0.0066,-0.0346,-0.0656],  // Fig2 row 73 cols 1-5
+  learning:[-0.0837,-0.0086, 0.0071, 0.0061, 0.0042]   // Fig2 row 72 cols 1-5
+};
+const bLabels=['≤1h','1–2h','2–3h','3–5h','5–7h'];
+let bMode='leisure';
+function setBelongMode(m){
+  bMode=m;
+  document.getElementById('tog-leisure').classList.toggle('active',m==='leisure');
+  document.getElementById('tog-leisure').setAttribute('aria-pressed',m==='leisure'?'true':'false');
+  document.getElementById('tog-learning').classList.toggle('active',m==='learning');
+  document.getElementById('tog-learning').setAttribute('aria-pressed',m==='learning'?'true':'false');
+  updateBelonging(document.getElementById('belongSlider').value);
+}
+function updateBelonging(val){
+  val=parseInt(val);
+  const idx=bData[bMode][val];
+  const sign=idx>=0?'+':'';
+  const iv=document.getElementById('indexVal');
+  iv.textContent=sign+idx.toFixed(3);
+  iv.style.color=idx>0.01?'#2aaa90':idx<-0.04?'#E8472A':'#888';
+  let face,lbl,desc;
+  if(bMode==='learning'){
+    face=val<=3?'😊':val<=5?'🙂':'😐';
+    lbl=val<=3?'Feeling good':'Still okay';
+    desc=`Learning screen time (${bLabels[val]}) barely affects belonging — the index stays stable across the board.`;
+  } else {
+    if(idx>0.01){face='😄';lbl='Feeling really connected!';}
+    else if(idx>-0.02){face='😊';lbl='Feeling pretty good';}
+    else if(idx>-0.04){face='😐';lbl='Starting to feel a bit meh…';}
+    else if(idx>-0.07){face='😕';lbl='Feeling a bit left out';}
+    else if(idx>-0.09){face='😟';lbl='Feeling pretty lonely';}
+    else{face='😢';lbl='Feeling disconnected';}
+    desc=val===1?'Up to 1 hour of leisure screen time — students still feel fairly connected.':val<=3?`At ${bLabels[val]} of leisure, belonging drops to ${sign+idx.toFixed(3)}. Students start to feel less connected.`:`At ${bLabels[val]} per day, belonging has fallen to ${sign+idx.toFixed(3)}. Heavy users feel notably more isolated at school.`;
+  }
+  document.getElementById('moodFace').textContent=face;
+  document.getElementById('moodLabel').textContent=lbl;
+  document.getElementById('moodDesc').textContent=desc;
+  const absMax=0.09;
+  if(idx>=0){document.getElementById('belongPosFill').style.width=Math.min((idx/absMax)*100,100)+'%';document.getElementById('belongNegFill').style.width='0%';}
+  else{document.getElementById('belongPosFill').style.width='0%';document.getElementById('belongNegFill').style.width=Math.min((Math.abs(idx)/absMax)*100,100)+'%';}
+  document.getElementById('belongSlider').style.setProperty('--pct',Math.round((val/4)*100)+'%');
+}
+updateBelonging(0);
+</script>
+</body>
+</html>
