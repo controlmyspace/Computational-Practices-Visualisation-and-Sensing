@@ -1,9 +1,9 @@
-# 📱 Screen Time & You 📱
+# Screen Time & You
 
 **IU000116 Computational Practices: Visualisation and Sensing**
 BSc (Hons) Creative Computing · UAL Creative Computing Institute · Summer Term 2026
 
-🌐 **Live site:** https://controlmyspace.github.io/Computational-Practices-Visualisation-and-Sensing/
+**Live site:** https://controlmyspace.github.io/Computational-Practices-Visualisation-and-Sensing/
 
 ---
 
