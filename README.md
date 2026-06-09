@@ -6,7 +6,7 @@
 
 ---
 
-## What is this?
+## About
 
 An interactive, scrollable data story exploring what the world's largest school study (OECD PISA 2022), covering 690,000 students across 81 countries, actually says about screen time in correlation to academic performance.
 
