@@ -18,7 +18,7 @@ The site guides the reader through five sections, each revealing a different lay
 
 ## Repository contents
 
-| File | What it is |
+| File | About |
 |---|---|
 | `index.html` | The full interactive visualisation — single-file HTML/CSS/JS |
 | `pisa_analysis.ipynb` | Jupyter notebook: data cleaning, analysis, and export using pandas |
