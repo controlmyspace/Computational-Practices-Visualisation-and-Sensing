@@ -31,7 +31,7 @@ The site guides the reader through five sections, each revealing a different lay
 
 ---
 
-## How to open data visualization
+## How to open
 
 A single HTML file, so no build tools or dependencies are needed.  
 
