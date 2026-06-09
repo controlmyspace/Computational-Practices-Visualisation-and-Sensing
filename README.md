@@ -1,19 +1,17 @@
-# 📱 Screen Time & You
+# 📱 Screen Time & You 📱
 
 **IU000116 Computational Practices: Visualisation and Sensing**
-BSc (Hons) Creative Computing · UAL Creative Computing Institute · 2026
+BSc (Hons) Creative Computing · UAL Creative Computing Institute · Summer Term 2026
 
 🌐 **Live site:** https://controlmyspace.github.io/Computational-Practices-Visualisation-and-Sensing/
-
-📁 **Repository:** https://github.com/controlmyspace/Computational-Practices-Visualisation-and-Sensing
 
 ---
 
 ## What is this?
 
-An interactive, scrollable data story exploring what the world's largest school study — OECD PISA 2022, covering 690,000 students across 81 countries — actually says about screen time and academic performance.
+An interactive, scrollable data story exploring what the world's largest school study (OECD PISA 2022), covering 690,000 students across 81 countries, actually says about screen time in correlation to academic performance.
 
-The central question: **is screen time hurting students, or is the picture more complicated than that?**
+The central question: **is screen time hurting students, or is the picture more complicated?**
 
 The site guides the reader through five sections, each revealing a different layer of the data: classroom distraction rates by country, the relationship between leisure screen time and maths scores, a scrollytelling D3 chart showing the "sweet spot" effect, a quiz, and a belonging index explorer. It ends with an honest critical audit of the dataset's limitations.
 
@@ -34,26 +32,10 @@ The site guides the reader through five sections, each revealing a different lay
 
 ---
 
-## How to run it locally
+## How to open data visualization
 
-No build tools or dependencies needed — it's a single HTML file.
+A single HTML file, so no build tools or dependencies are needed.  
 
-1. Clone the repo:
-   ```
-   git clone https://github.com/controlmyspace/Computational-Practices-Visualisation-and-Sensing.git
-   ```
-2. Open the folder in VS Code and run **Live Server** (right-click `index.html` → Open with Live Server)
-3. Visit `http://localhost:5500`
-
-> ⚠️ You need to run it through a local server (not by double-clicking the file) because of the `fetch('pisa_data.json')` call — browsers block local file fetches for security reasons. This is the same setup used throughout the course workshops.
-
-To run the Jupyter notebook:
-```
-pip install pandas openpyxl matplotlib jupyter
-jupyter notebook pisa_analysis.ipynb
-```
-
----
 
 ## Data source
 
@@ -66,7 +48,7 @@ Specific figures used:
 - **Figure 3** — Average maths scores by daily leisure screen time bracket, by activity type (5 brackets)
 - **Tables 43 & 44** — Sense of belonging index by screen time bracket
 
-The raw Excel file was downloaded from the OECD iLibrary. The notebook (`pisa_analysis.ipynb`) handles all cleaning: renaming columns, filtering OECD averages, reshaping wide tables into tidy format (Wickham, 2014), and exporting `pisa_data.json` for the frontend.
+The raw Excel file was downloaded from the OECD iLibrary. The notebook (`pisa_analysis.ipynb`) handles all cleaning: renaming columns, filtering OECD averages, reshaping wide tables into tidy format (Wickham, 2014), and exporting `pisa_data.json` for the frontend code.
 
 ---
 
@@ -86,7 +68,7 @@ The raw Excel file was downloaded from the OECD iLibrary. The notebook (`pisa_an
 - Output: `pisa_data.json` with a `distraction_by_country` array consumed by the frontend's country explorer via `fetch()`
 
 ### Narrative structure
-The site follows Freytag's Pyramid (introduced in Week 4):
+The site follows Freytag's Pyramid (introduced in Week 4 of the course):
 - **Exposition** — classroom distraction rates
 - **Rising action** — scores drop with more screen time
 - **Climax** — the sweet spot chart (not all screen time is equal)
@@ -143,7 +125,3 @@ Tufte, E. (2001). *The Visual Display of Quantitative Information*, 2nd ed. Grap
 Wickham, H. (2014). Tidy Data. *Journal of Statistical Software*, 59(10). Available at: https://r4ds.had.co.nz/tidy-data.html
 
 Yau, N. (2011). *Visualise This*. John Wiley & Sons.
-
----
-
-*Submitted in partial fulfilment of IU000116 Computational Practices: Visualisation and Sensing · UAL CCI · June 2026*
